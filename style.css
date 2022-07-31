@@ -1,0 +1,30 @@
+.title {
+    background-color: rgb(255, 132, 0);
+    font-family: sans-serif;
+    text-align: center;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.content {
+    padding-top: 4px;
+    font-family: Calibri;
+    text-align: center; 
+    display: block;
+}
+
+.button {
+    background-color: rgb(234, 234, 234);
+    margin: 10px;
+    width: 20%;
+    border: black 3px solid;
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+}
+
+.button p {
+    width: auto; /* text wrapping */
+}
