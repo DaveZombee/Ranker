@@ -1,49 +1,19 @@
-let itemArray; // the items to rank
+import { itemArray, arrayLength } from "./submit.js";
 let rankArray = []; // rank of the items
 let battleArray = []; // battle history
-let arrayLength = 0;
 
 let i = 0; // to loop through array
 let j = 1; // also to loop through array
 
-// user submits
-function submit() {
-    // capture input
-    const userInput = document.getElementById("input").value;
-
-    // separate input into array
-    itemArray = userInput.split(/\r?\n/);
-    arrayLength = itemArray.length;
-
-    // make sure there's not an empty string at the end or anywhere ///////////////////////////////// do this
-    if (itemArray[arrayLength - 1] === "") {
-        itemArray.pop();
-        arrayLength--;
-    }
-
-    // validating input
-    if (arrayLength === 0 || arrayLength === 1) {
-        switch (arrayLength) {
-            case 0:
-                alert("You didn't input any items, try again");
-                break;
-            case 1:
-                alert("You only input one item, try again");
-        }
-
-    } else {
-        // populating rankArray and battleArray
-        for (let i = 0; i < arrayLength; i++) {
-            rankArray.push(arrayLength); // arrayLength = last place
-            battleArray.push([]); /// creating 2d array
-        }
-
-        // begin ranking process
-        compareRanks();
+// populating rankArray and battleArray
+function createArrays() {
+    for (let i = 0; i < arrayLength; i++) {
+        rankArray.push(arrayLength); // arrayLength = last place
+        battleArray.push([]); /// creating 2d array
     }
 }
 
-// looping through the array
+// compare ranks and iterate through the array
 function compareRanks() {
     if (rankArray[i] == rankArray[i + j]) { // ranks are the same
         initiateBattle(i, i + j);
@@ -52,11 +22,11 @@ function compareRanks() {
     }
 }
 
-// iterating i and j, checking validity
+// manually iterating i and j, checking i and j's validity
 function iterateIJ() {
     j++;
 
-    if (i + j >= arrayLength) { // i+j is outside scope of array, raise i
+    if (i + j >= arrayLength) { // i+j is outside scope of array, raise i reset j
         i++;
         j = 1;
 
@@ -72,24 +42,22 @@ function iterateIJ() {
 
 // starts a battle between two items when needed
 function initiateBattle(firstItem, secondItem) {
-
     // check if the two items haven't already battled
     if (battleArray[firstItem][secondItem] === undefined) {
-        // draws the boxes
-        document.getElementById("content").innerHTML = "Click on the one you like more<br><div class='button' onclick='onChoiceMade(1)'><p>"
-            + itemArray[firstItem] + "</p></div><div class='button' onclick='onChoiceMade(2)'><p>" + itemArray[secondItem] + "</p></div>";
-    } else { // if the items have already battled
+        // changes text in buttons
+        document.getElementById("leftButton").innerText = itemArray[firstItem];
+        document.getElementById("rightButton").innerText = itemArray[secondItem];
+    } else { // items have already battled
         if (battleArray[firstItem][secondItem] == firstItem) { // first item won
             rankArray[firstItem]--;
         } else { // second item won
             rankArray[secondItem]--;
         }
-
         compareRanks();
     }
 }
 
-// when a choice is made (aka a button is clicked)
+// when a choice is made (a button is clicked)
 function onChoiceMade(winner) {
     let winnerIndex;
 
@@ -120,14 +88,13 @@ function checkAllRanks() {
         }
     }
 
-    // if the none of the ranks are the same, therefore ranking is done
+    // none of the ranks are the same, ranking is done
     if (anySameRanks == false) {
         sortArrays();
-        // fake loading circle
         drawFinalRanking();
     } else { // continue ranking process
         i = 0;
-        compareRanks(); 
+        compareRanks();
     }
 }
 
@@ -136,14 +103,15 @@ function sortArrays() {
     for (let x = 0; x < arrayLength; x++) {
         let lowest = x;
 
+        // find the lowest element
         for (let n = x + 1; n < arrayLength; n++) {
             if (rankArray[n] < rankArray[lowest]) {
                 lowest = n;
             }
         }
-        
+
         if (lowest !== x) { // if x isn't the lowest value
-            // swap both
+            // swap rank and item array indexes
             [rankArray[x], rankArray[lowest]] = [rankArray[lowest], rankArray[x]];
             [itemArray[x], itemArray[lowest]] = [itemArray[lowest], itemArray[x]];
         }
@@ -153,10 +121,21 @@ function sortArrays() {
 // draw the ranking on the page
 function drawFinalRanking() {
     let resultStr = "Your final ranking:<br>";
-    
+
     for (let i = 0; i < arrayLength; i++) {
-        resultStr += rankArray[i]+'. '+itemArray[i]+"<br>";
+        resultStr += rankArray[i] + '. ' + itemArray[i] + "<br>";
     }
 
     document.getElementById("content").innerHTML = resultStr;
 }
+
+createArrays();
+compareRanks();
+
+document.querySelectorAll("#leftButton").addEventListener("click", function () {
+    onChoiceMade(1);
+}, false);
+
+document.querySelectorAll("#rightButton").addEventListener("click", function () {
+    onChoiceMade(2);
+}, false);
