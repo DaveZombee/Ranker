@@ -1,9 +1,20 @@
-import { itemArray, arrayLength } from "./submit.js";
+// get itemArray from cookie
+fromCookie = document.cookie;
+itemArray = fromCookie.split("=")[1];
+
+console.log("from cookie"+fromCookie);
+console.log("itemarray: "+itemArray);
+
 let rankArray = []; // rank of the items
 let battleArray = []; // battle history
+let arrayLength = itemArray.length; // length of itemArray
 
 let i = 0; // to loop through array
 let j = 1; // also to loop through array
+
+// get the buttons from DOM
+const leftButton = document.querySelector("#leftButton");
+const rightButton = document.querySelector("#rightButton");
 
 // populating rankArray and battleArray
 function createArrays() {
@@ -45,8 +56,8 @@ function initiateBattle(firstItem, secondItem) {
     // check if the two items haven't already battled
     if (battleArray[firstItem][secondItem] === undefined) {
         // changes text in buttons
-        document.getElementById("leftButton").innerText = itemArray[firstItem];
-        document.getElementById("rightButton").innerText = itemArray[secondItem];
+        leftButton.innerText = itemArray[firstItem];
+        rightButton.innerText = itemArray[secondItem];
     } else { // items have already battled
         if (battleArray[firstItem][secondItem] == firstItem) { // first item won
             rankArray[firstItem]--;
@@ -132,10 +143,6 @@ function drawFinalRanking() {
 createArrays();
 compareRanks();
 
-document.querySelectorAll("#leftButton").addEventListener("click", function () {
-    onChoiceMade(1);
-}, false);
-
-document.querySelectorAll("#rightButton").addEventListener("click", function () {
-    onChoiceMade(2);
-}, false);
+// button event listeners for when user picks
+leftButton.addEventListener("click", function () { onChoiceMade(1); }, false);
+rightButton.addEventListener("click", function () { onChoiceMade(2); }, false);
