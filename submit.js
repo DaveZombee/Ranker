@@ -17,7 +17,7 @@ function submit() {
     }
 
     // validating input
-    if (arrayLength === 0 || arrayLength === 1) {
+    if (arrayLength === 0 || arrayLength === 1) { // input not accepted
         switch (arrayLength) {
             case 0:
                 alert("You didn't input any items, try again");
@@ -26,14 +26,17 @@ function submit() {
                 alert("You only input one item, try again");
         }
 
-    } else {
+    } else { // input accepted
+        // write itemArray to cookie
+        // document.cookie = "array=" + itemArray;
+        document.cookie = "test=hi";
+        console.log("from submit js: "+document.cookie);
+
         // opens ranking page
         window.location.replace("ranking.html");
     }
 
 }
-// when user clicks button, submit() takes place
-document.querySelector("button").addEventListener("click", submit, false);
 
-// exports itemArray and arrayLength for the other js file
-export { itemArray, arrayLength };
+// when user clicks button, submit() takes place
+// document.querySelector("button").addEventListener("click", submit, false);
