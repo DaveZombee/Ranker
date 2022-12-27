@@ -1,8 +1,8 @@
-let itemArray; // the items to rank
-let arrayLength = 0; // length of the array
-
 // user presses submit
-function submit() {
+export function submit() {
+    let itemArray; // the items to rank
+    let arrayLength = 0; // length of the array
+
     // capture input
     const userInput = document.getElementById("input").value;
 
@@ -27,13 +27,7 @@ function submit() {
         }
 
     } else {
-        // opens ranking page
-        window.location.replace("ranking.html");
+        return [itemArray, arrayLength]
     }
 
 }
-// when user clicks button, submit() takes place
-document.querySelector("button").addEventListener("click", submit, false);
-
-// exports itemArray and arrayLength for the other js file
-export { itemArray, arrayLength };
