@@ -1,5 +1,5 @@
-import { submit } from "submit.js"
-import { iterateIJ, isAlreadyCompared, isRanked, sortArrays, drawFinalRanking, drawRankScreen } from "ranking.js"
+import { submit } from "/Ranker/submit.js"
+import { iterateIJ, isAlreadyCompared, isRanked, sortArrays, drawFinalRanking, drawRankScreen } from "/Ranker/ranking.js"
 
 let itemArray
 let arrayLength
