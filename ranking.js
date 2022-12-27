@@ -1,105 +1,42 @@
-import { itemArray, arrayLength } from "./submit.js";
-let rankArray = []; // rank of the items
-let battleArray = []; // battle history
-
-let i = 0; // to loop through array
-let j = 1; // also to loop through array
-
-// populating rankArray and battleArray
-function createArrays() {
-    for (let i = 0; i < arrayLength; i++) {
-        rankArray.push(arrayLength); // arrayLength = last place
-        battleArray.push([]); /// creating 2d array
-    }
-}
-
-// compare ranks and iterate through the array
-function compareRanks() {
-    if (rankArray[i] == rankArray[i + j]) { // ranks are the same
-        initiateBattle(i, i + j);
-    } else { // ranks aren't the same
-        iterateIJ();
-    }
-}
-
-// manually iterating i and j, checking i and j's validity
-function iterateIJ() {
+// manually iterating i and j
+export function iterateIJ(i, j, arrayLength) {
     j++;
 
     if (i + j >= arrayLength) { // i+j is outside scope of array, raise i reset j
         i++;
         j = 1;
-
-        if (i >= arrayLength) { // i is outside scope of array, check if ranking is done
-            checkAllRanks();
-        } else { // i is inside scope of array, continue comparing
-            compareRanks();
-        }
-    } else { // i + j is inside scope of array, continue comparing
-        compareRanks();
     }
+
+    return {i , j}
 }
 
-// starts a battle between two items when needed
-function initiateBattle(firstItem, secondItem) {
+/** Return true if the two items have already battled before */
+export function isAlreadyCompared(firstItem, secondItem, battleArray) {
     // check if the two items haven't already battled
     if (battleArray[firstItem][secondItem] === undefined) {
-        // changes text in buttons
-        document.getElementById("leftButton").innerText = itemArray[firstItem];
-        document.getElementById("rightButton").innerText = itemArray[secondItem];
+        return false
     } else { // items have already battled
-        if (battleArray[firstItem][secondItem] == firstItem) { // first item won
-            rankArray[firstItem]--;
-        } else { // second item won
-            rankArray[secondItem]--;
-        }
-        compareRanks();
+        return true
     }
 }
 
-// when a choice is made (a button is clicked)
-function onChoiceMade(winner) {
-    let winnerIndex;
+/** Return true if the items are all ranked */ 
+export function isRanked(rankArray, arrayLength) {
+    let anySameRanks = true
 
-    if (winner == 1) {
-        winnerIndex = i; // i is firstItem
-    } else {
-        winnerIndex = i + j; // i + j is secondItem
-    }
-    // change rank array
-    rankArray[winnerIndex]--;
-
-    // change battle array
-    battleArray[i][i + j] = winnerIndex;
-
-    iterateIJ();
-}
-
-// check if any of the items have the same ranking
-function checkAllRanks() {
-    let anySameRanks = false;
-
-    // compare each item with the other
-    for (let y = 0; y < arrayLength - 1; y++) {
-        for (let z = 1; y + z < arrayLength; z++) {
-            if (rankArray[y] == rankArray[y + z]) {
-                anySameRanks = true;
+    for (let i = 0; i < arrayLength - 1; i++) {
+        for (let j = 1; i + j < arrayLength; j++) {
+            if (rankArray[i] == rankArray[i + j]) {
+                anySameRanks = false;
             }
         }
     }
 
-    // none of the ranks are the same, ranking is done
-    if (anySameRanks == false) {
-        sortArrays();
-        drawFinalRanking();
-    } else { // continue ranking process
-        i = 0;
-        compareRanks();
-    }
+    return anySameRanks
 }
 
 // sorting the arrays to reflect actual order (selection sort)
-function sortArrays() {
+export function sortArrays(rankArray, itemArray, arrayLength) {
     for (let x = 0; x < arrayLength; x++) {
         let lowest = x;
 
@@ -119,7 +56,7 @@ function sortArrays() {
 }
 
 // draw the ranking on the page
-function drawFinalRanking() {
+export function drawFinalRanking(rankArray, itemArray, arrayLength) {
     let resultStr = "Your final ranking:<br>";
 
     for (let i = 0; i < arrayLength; i++) {
@@ -129,13 +66,30 @@ function drawFinalRanking() {
     document.getElementById("content").innerHTML = resultStr;
 }
 
-createArrays();
-compareRanks();
+// draw boxes for ranking
+export function drawRankScreen() {
+    let element = document.getElementById("content")
 
-document.querySelectorAll("#leftButton").addEventListener("click", function () {
-    onChoiceMade(1);
-}, false);
+    element.innerHTML = "<h2>Click the one you like more</h2>"
 
-document.querySelectorAll("#rightButton").addEventListener("click", function () {
-    onChoiceMade(2);
-}, false);
+    let buttonA = document.createElement("div")
+    let buttonB = document.createElement("div")
+
+    buttonA.id = "left"
+    buttonB.id = "right"
+    
+    buttonA.classList.add("button")
+    buttonB.classList.add("button")
+
+    let buttonAText = document.createElement('p')
+    let buttonBText = document.createElement('p')
+
+    buttonAText.id = "leftButton"
+    buttonBText.id = "rightButton"
+
+    buttonA.appendChild(buttonAText)
+    buttonB.appendChild(buttonBText)
+
+    element.appendChild(buttonA)
+    element.appendChild(buttonB)
+}
