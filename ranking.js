@@ -92,4 +92,8 @@ export function drawRankScreen() {
 
     element.appendChild(buttonA)
     element.appendChild(buttonB)
+
+    let percentage = document.createElement('p')
+    percentage.id = "percentage"
+    element.appendChild(percentage)
 }
