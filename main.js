@@ -99,7 +99,7 @@ function choiceMade(winner) {
 }
 
 function getPercentageRanked(comparisons, totalComparisons) {
-    return Math.round((comparisons - 1) / totalComparisons * 100).toFixed(2)
+    return ((comparisons - 1) / totalComparisons * 100).toFixed(2)
 }
 
 function getTotalComparisons(n) {
